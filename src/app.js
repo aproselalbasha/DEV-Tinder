@@ -2,17 +2,19 @@ const express = require("express");
 const app = express();
 const { isuserauth, isadminauth } = require("./middleware/auth");
 
-app.get("/user/profile", isuserauth, (req, res) => {
-  res.send("profile sent");
+app.get("/user", (req, res) => {
+  // try {
+  //   throw new Error("its throwing error");
+  //   res.send("profile sent");
+  // } catch (err) {
+  //   res.status(500).send("error");
+  // }
+  throw new Error("its throwing error");
 });
-app.get("/user/profiledelete", isuserauth, (req, res) => {
-  res.send("profile delete");
-});
-app.get("/admin", isadminauth, (req, res) => {
-  res.send("admin data send");
-});
-app.post("/user/login", (req, res) => {
-  res.send("logges in sucessfully");
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("error from middle ware");
+  }
 });
 app.listen(7777, () => {
   console.log(" server listining");
