@@ -1,12 +1,19 @@
 const express = require("express");
 const app = express();
-app.listen(7777);
-app.use("/test", (req, res) => {
-  res.send("test created sucessfully ");
+const { isuserauth, isadminauth } = require("./middleware/auth");
+
+app.get("/user/profile", isuserauth, (req, res) => {
+  res.send("profile sent");
 });
-app.use("/hello", (req, res) => {
-  res.send("hello page created");
+app.get("/user/profiledelete", isuserauth, (req, res) => {
+  res.send("profile delete");
 });
-app.use((req, res) => {
-  res.send("app created sucessfully");
+app.get("/admin", isadminauth, (req, res) => {
+  res.send("admin data send");
+});
+app.post("/user/login", (req, res) => {
+  res.send("logges in sucessfully");
+});
+app.listen(7777, () => {
+  console.log(" server listining");
 });
