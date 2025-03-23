@@ -301,3 +301,24 @@ res.status(500).send("error from middle ware");
 app.listen(7777, () => {
 console.log(" server listining");
 });
+to connect the database
+const express = require("express");
+const app = express();
+const { connectDB } = require("./config/database");
+connectDB()
+.then(() => {
+console.log("database connected");
+app.listen(7777, () => {
+console.log(" server listining");
+});
+})
+.catch((err) => console.log("data base not conncted"));
+database.js file
+const mongoose = require("mongoose");
+const connectDB = async () => {
+await mongoose.connect(
+"mongodb+srv://apaprose:wVvCXiNxxz5Tb4AS@namastenode.tttrz.mongodb.net/"
+);
+};
+
+module.exports = { connectDB };

@@ -1,21 +1,25 @@
 const express = require("express");
 const app = express();
-const { isuserauth, isadminauth } = require("./middleware/auth");
+const { connectDB } = require("./config/database");
+const User = require("./models/user");
+app.post("/signup", async (req, res) => {
+  const user = new User({
+    firstName: "Ayaan",
+    lastName: "A",
+    emailId: "ap.aprose@gmail.com",
+    passWord: "Applemmac@786",
+    age: "5.5",
+    gender: "m",
+  });
+  await user.save();
+  res.send("data saved");
+});
 
-app.get("/user", (req, res) => {
-  // try {
-  //   throw new Error("its throwing error");
-  //   res.send("profile sent");
-  // } catch (err) {
-  //   res.status(500).send("error");
-  // }
-  throw new Error("its throwing error");
-});
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(500).send("error from middle ware");
-  }
-});
-app.listen(7777, () => {
-  console.log(" server listining");
-});
+connectDB()
+  .then(() => {
+    console.log("database connected");
+    app.listen(7777, () => {
+      console.log(" server listining");
+    });
+  })
+  .catch((err) => console.log("data base not conncted"));
