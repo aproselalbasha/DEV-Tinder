@@ -44,15 +44,25 @@ app.patch("/user", async (req, res) => {
   const data = req.body;
 
   try {
+    const updateallowed = ["_id", "firstName", "lastName", "age", "skills"];
+    const isallowed = Object.keys(data).every((k) => updateallowed.includes(k));
+
+    if (!isallowed) {
+      res.send("not allowed");
+    }
+    if (data?.skills.length > 5) {
+      throw new Error("update more 5 skill not allowed");
+    }
+
     const userupdate = await User.findByIdAndUpdate({ _id: userid }, data, {
       returnDocument: "after",
       runValidators: true,
     });
-    console.log(userupdate);
+
     res.send("user detail updated");
   } catch (err) {
     console.log("something went wrong");
-    res.send("invalid gender" + err);
+    res.send("something went wrong :" + err);
   }
 });
 // app.get("/feed", async (req, res) => {

@@ -24,6 +24,7 @@ const Userschema = mongoose.Schema(
       type: Number,
       min: 18,
     },
+    skills: { type: [String] },
     gender: {
       type: String,
       validate(value) {
