@@ -1,12 +1,21 @@
 const express = require("express");
 const { connectDB } = require("./config/database");
+const { dataverify } = require("./utils/helper");
+const bcrypt = require("bcrypt");
 const app = express();
 app.use(express.json());
 
 const User = require("./models/user");
 app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
   try {
+    const { firstName, emailId, passWord } = req.body;
+    //password hash
+    const passwordhash = await bcrypt.hash(passWord, 10);
+    console.log(passwordhash);
+
+    const user = new User({ firstName, emailId, passWord: passwordhash });
+
+    dataverify(req);
     await user.save();
     res.send("data stored in database");
   } catch (err) {
