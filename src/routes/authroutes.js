@@ -51,4 +51,8 @@ authroutes.post("/signin", async (req, res) => {
     res.status(400).send("error saving user:" + err);
   }
 });
+authroutes.post("/logout", (req, res) => {
+  res.cookie("tokken", null, { expires: new Date(Date.now()) }),
+    res.send("loggout sucessfull");
+});
 module.exports = { authroutes };
