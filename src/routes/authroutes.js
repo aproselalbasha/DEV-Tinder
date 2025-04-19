@@ -28,7 +28,7 @@ authroutes.post("/signup", async (req, res) => {
 });
 authroutes.post("/signin", async (req, res) => {
   try {
-    const { firstName, emailId, passWord } = req.body;
+    const { emailId, passWord } = req.body;
     const user = await User.findOne({ emailId: emailId });
     if (!user) {
       throw new Error("Invalid email");
@@ -45,7 +45,7 @@ authroutes.post("/signin", async (req, res) => {
         expires: new Date(Date.now() + 900000),
         httpOnly: true,
       });
-      res.send("login success");
+      res.send(user);
     }
   } catch (err) {
     res.status(400).send("error saving user:" + err);

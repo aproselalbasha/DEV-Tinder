@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const { userauth } = require("../middleware/auth");
-const profileeditvalidation = require("../utils/helper");
+const { profileeditvalidation } = require("../utils/helper");
 const bcrypt = require("bcrypt");
 
 const cookieparser = require("cookie-parser");
@@ -17,7 +17,7 @@ profileroute.get("/profile/view", async (req, res) => {
     const getcookie = req.cookies;
     const { tokken } = getcookie;
     if (!tokken) {
-      throw new Error("invalid tokken");
+      return res.status(401).send("PLEASE LOGIN");
     }
     const istokkenvalid = await jwt.verify(tokken, "Aprose@@@786");
     const { _id } = istokkenvalid;

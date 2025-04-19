@@ -3,12 +3,26 @@ const { connectDB } = require("./config/database");
 const cookieparser = require("cookie-parser");
 const app = express();
 const { userauth } = require("./middleware/auth");
-app.use(express.json());
-app.use(cookieparser());
+const cors = require("cors");
 const { authroutes } = require("./routes/authroutes");
 const { profileroute } = require("./routes/profile");
+const requestRouter = require("./routes/request");
+const userconnectionreq = require("./routes/userrouter");
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(cookieparser());
+
 app.use("/", authroutes);
 app.use("/", profileroute);
+app.use("/", requestRouter);
+app.use("/", userconnectionreq);
 app.get("/sendconnection", userauth, async (req, res) => {
   try {
     res.send("request send");
