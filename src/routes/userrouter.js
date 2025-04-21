@@ -14,7 +14,7 @@ userconnectionreq.get("/user/request/received", userauth, async (req, res) => {
         toUserid: loguser,
         status: "interested",
       })
-      .populate("fromUserid", ["firstName", "lastName"]);
+      .populate("fromUserid", ["firstName", "lastName", "photoUrl"]);
 
     res.json({ message: "data receved", data: allrequest });
   } catch (err) {
@@ -33,8 +33,8 @@ userconnectionreq.get("/user/connection", userauth, async (req, res) => {
           { toUserid: loggedinuser._id, status: "accepted" },
         ],
       })
-      .populate("fromUserid", "firstName")
-      .populate("toUserid", "firstName");
+      .populate("fromUserid", "firstName photoUrl")
+      .populate("toUserid", "firstName photoUrl ");
     const data = userconnection.map((row) => {
       if (row.fromUserid._id.toString() === row.toUserid._id.toString()) {
         return row.toUserid;
