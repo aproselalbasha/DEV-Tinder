@@ -12,6 +12,7 @@ app.use(cookieparser());
 const authroutes = express.Router();
 authroutes.post("/signup", async (req, res) => {
   try {
+    dataverify(req);
     const { firstName, emailId, passWord } = req.body;
     //password hash
     const passwordhash = await bcrypt.hash(passWord, 10);
@@ -19,9 +20,15 @@ authroutes.post("/signup", async (req, res) => {
 
     const user = new User({ firstName, emailId, passWord: passwordhash });
 
-    dataverify(req);
-    await user.save();
-    res.send("data stored in database");
+    const savedUser = await user.save();
+
+    const token = await savedUser.getjwt();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+      httpOnly: true,
+    });
+    res.json({ message: "User Added successfully!", data: savedUser });
   } catch (err) {
     res.status(400).send("error saving user:" + err);
   }
@@ -41,7 +48,7 @@ authroutes.post("/signin", async (req, res) => {
       //createing jwt tokken
       const jwttokken = await user.getjwt();
       //creating cookies
-      res.cookie("tokken", jwttokken, {
+      res.cookie("token", jwttokken, {
         expires: new Date(Date.now() + 900000),
         httpOnly: true,
       });
@@ -52,7 +59,7 @@ authroutes.post("/signin", async (req, res) => {
   }
 });
 authroutes.post("/logout", (req, res) => {
-  res.cookie("tokken", null, { expires: new Date(Date.now()) }),
+  res.cookie("token", null, { expires: new Date(Date.now()) }),
     res.send("loggout sucessfull");
 });
 module.exports = { authroutes };

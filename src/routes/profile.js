@@ -15,11 +15,11 @@ const profileroute = express.Router();
 profileroute.get("/profile/view", async (req, res) => {
   try {
     const getcookie = req.cookies;
-    const { tokken } = getcookie;
-    if (!tokken) {
+    const { token } = getcookie;
+    if (!token) {
       return res.status(401).send("PLEASE LOGIN");
     }
-    const istokkenvalid = await jwt.verify(tokken, "Aprose@@@786");
+    const istokkenvalid = await jwt.verify(token, "Aprose@@@786");
     const { _id } = istokkenvalid;
     const user = await User.findById(_id);
     if (!user) {

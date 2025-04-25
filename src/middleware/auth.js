@@ -4,13 +4,14 @@ const userauth = async (req, res, next) => {
   try {
     //getting cookie
 
-    const { tokken } = req.cookies;
-    if (!tokken) {
+    const { token } = req.cookies;
+
+    if (!token) {
       return res.status(401).send("please login");
     }
 
     //verify jwt
-    const uniqueauth = await jwt.verify(tokken, "Aprose@@@786");
+    const uniqueauth = await jwt.verify(token, "Aprose@@@786");
     const { _id } = uniqueauth;
     const user = await usermodel.findById(_id);
     req.user = user;
