@@ -11,7 +11,7 @@ const userauth = async (req, res, next) => {
     }
 
     //verify jwt
-    const uniqueauth = await jwt.verify(token, "Aprose@@@786");
+    const uniqueauth = await jwt.verify(token, process.env.JWT_SECRET);
     const { _id } = uniqueauth;
     const user = await usermodel.findById(_id);
     req.user = user;
