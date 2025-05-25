@@ -36,7 +36,7 @@ userconnectionreq.get("/user/connection", userauth, async (req, res) => {
       .populate("fromUserid", "firstName photoUrl")
       .populate("toUserid", "firstName photoUrl ");
     const data = userconnection.map((row) => {
-      if (row.fromUserid._id.toString() === row.toUserid._id.toString()) {
+      if (row.fromUserid._id.toString() === loggedinuser._id.toString()) {
         return row.toUserid;
       } else return row.fromUserid;
     });
